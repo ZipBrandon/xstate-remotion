@@ -1,0 +1,37 @@
+export interface WatchedVideoContextInterface {
+  watchedVideos;
+  setWatchedVideos;
+  videoTag;
+  watchedVideoHandler;
+  toggleFauxScreen;
+  setPlaying;
+  setVolume;
+  getDuration;
+  getCurrentTime;
+  setPlaybackRate;
+  mute;
+  unmute;
+  seekTo;
+  isPlaying;
+  isDisplayed;
+  setIsDisplayed;
+  setOnEnded;
+  setOnError;
+  seekRelativeSeconds;
+  setOnPlay;
+  setOnPause;
+  unloadVideo;
+  preferFauxScreen;
+  setPreferFauxScreen;
+  setThumbnail;
+  thumbnail;
+  vtt;
+  setVtt;
+  togglePlaying;
+  setAutoPlay;
+  seekToPercent;
+  loadVideo;
+  toggleMute;
+  isMuted;
+  vol;
+}

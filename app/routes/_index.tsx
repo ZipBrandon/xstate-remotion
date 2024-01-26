@@ -1,4 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
+import useVideoPlayer from "~/videos/useVideoPlayer.tsx";
+import { VideoComponentV1 } from "~/videos/components/VideoComponentV1.tsx";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,34 +10,18 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+  const { isPlaying, getCurrentTime, setPlaying } = useVideoPlayer({
+    autoPlay: true,
+    videoUrl:
+      "https://zipdeal.s3.amazonaws.com/m/globalvideo/processed_video/9a830cbb-1236-4494-aa83-1277f2d3a35b.mp4",
+    pageId: "something",
+    volume: 1,
+    videoThumbnail: undefined,
+    extra: undefined,
+  });
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div>
+      <VideoComponentV1 headingElement={null} videoIdentifier={"something"} />
     </div>
   );
 }
