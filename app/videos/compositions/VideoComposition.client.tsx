@@ -2,8 +2,7 @@
 import { TransitionSeries } from "@remotion/transitions";
 import { useSelector } from "@xstate/react";
 import React, { memo } from "react";
-import { AbsoluteFill } from "remotion";
-import { PausableVideo } from "~/videos/components/PausableVideo.tsx";
+import { AbsoluteFill, Video } from "remotion";
 import { useZipDealVideoRef } from "../VideoRefProvider.tsx";
 
 export const VideoComposition = memo(
@@ -31,7 +30,7 @@ export const VideoComposition = memo(
       <AbsoluteFill>
         <TransitionSeries>
           <TransitionSeries.Sequence durationInFrames={videoDurationInFrames}>
-            <PausableVideo ref={videoRef} src={src} className={className} />
+            <Video ref={videoRef} src={src} className={className} />
           </TransitionSeries.Sequence>
         </TransitionSeries>
       </AbsoluteFill>

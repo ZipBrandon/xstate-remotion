@@ -13,16 +13,16 @@ const PausableVideoFunction: React.ForwardRefRenderFunction<
   HTMLVideoElement,
   RemotionVideoProps & RemotionMainVideoProps
 > = ({ src, ...props }, ref) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const pausableVideoRef = useRef<HTMLVideoElement>(null);
 
   const id = useId();
 
-  useImperativeHandle(ref, () => videoRef.current as HTMLVideoElement);
+  useImperativeHandle(ref, () => pausableVideoRef.current as HTMLVideoElement);
 
   const { canPlay, needsToBuffer } = useContext(BufferContext);
 
   useEffect(() => {
-    const { current } = videoRef;
+    const { current } = pausableVideoRef;
     if (!current) {
       return;
     }
@@ -47,7 +47,7 @@ const PausableVideoFunction: React.ForwardRefRenderFunction<
     };
   }, [canPlay, id, needsToBuffer]);
 
-  return <Video {...props} ref={videoRef} src={src} />;
+  return <Video {...props} ref={pausableVideoRef} src={src} />;
 };
 
 export const PausableVideo = forwardRef(PausableVideoFunction);

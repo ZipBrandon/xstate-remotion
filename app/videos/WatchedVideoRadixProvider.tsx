@@ -82,10 +82,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     `pause`
   );
 
-  const [onSeek, setOnSeek] = useMakeHandlers<`seeked`>(
-    videoPlayerMachineRef,
-    `seeked`
-  );
+  const [onSeek] = useMakeHandlers<`seeked`>(videoPlayerMachineRef, `seeked`);
   const [onEnded, setOnEnded] = useMakeHandlers<`ended`>(
     videoPlayerMachineRef,
     `ended`
@@ -94,8 +91,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     videoPlayerMachineRef,
     `error`
   );
-
-  const [vtt, setVtt] = useState<string | undefined>(undefined);
 
   ////////
   const setPlaying = useCallback(
@@ -231,30 +226,31 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     };
   }, [player]);
 
-  useEffect(() => {
-    if (!player) return;
-    player.addEventListener(`play`, handleOnPlay);
-    return () => {
-      player.removeEventListener(`play`, handleOnPlay);
-    };
-  }, [handleOnPlay, player]);
+  // useEffect(() => {
+  //   if (!player) return;
+  //   player.addEventListener(`play`, handleOnPlay);
+  //   return () => {
+  //     player.removeEventListener(`play`, handleOnPlay);
+  //   };
+  // }, [handleOnPlay, player]);
+  //
+  // useEffect(() => {
+  //   if (!player) return;
+  //   player.addEventListener(`pause`, handleOnPause);
+  //   return () => {
+  //     player.removeEventListener(`pause`, handleOnPause);
+  //   };
+  // }, [handleOnPause, player]);
+  //
+  // useEffect(() => {
+  //   if (!player) return;
+  //
+  //   player.addEventListener(`seeked`, onSeek);
+  //   return () => {
+  //     player.removeEventListener(`seeked`, onSeek);
+  //   };
+  // }, [onSeek, player]);
 
-  useEffect(() => {
-    if (!player) return;
-    player.addEventListener(`pause`, handleOnPause);
-    return () => {
-      player.removeEventListener(`pause`, handleOnPause);
-    };
-  }, [handleOnPause, player]);
-
-  useEffect(() => {
-    if (!player) return;
-
-    player.addEventListener(`seeked`, onSeek);
-    return () => {
-      player.removeEventListener(`seeked`, onSeek);
-    };
-  }, [onSeek, player]);
   useEffect(() => {
     if (!player) return;
 
@@ -322,13 +318,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     },
     [videoPlayerSend]
   );
-
-  // const setSrc = useCallback(
-  //   (src) => {
-  //     videoPlayerSend({ type: `control.setSrc`, videoUrl: src });
-  //   },
-  //   [videoPlayerSend],
-  // );
 
   const setVolume = useCallback(
     (volume) => {
@@ -439,8 +428,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
       setPreferFauxScreen,
       setThumbnail,
       thumbnail,
-      vtt,
-      setVtt,
       seekToPercent,
       seekRelativeSeconds,
       setAutoPlay,
@@ -474,8 +461,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
       setPreferFauxScreen,
       setThumbnail,
       thumbnail,
-      vtt,
-      setVtt,
       seekToPercent,
       seekRelativeSeconds,
       setAutoPlay,
@@ -497,7 +482,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
 
 export const useCurrentVideoProgress = () => {
   // const currentProgress = useRef(0);
-  const { videoPlayerMachineRef, videoPlayerSend } = useZipDealVideoRef();
+  const { videoPlayerMachineRef } = useZipDealVideoRef();
   const videoProgress = useSelector(videoPlayerMachineRef, (state) => {
     return state.context.videoProgress / 100.0;
   });
@@ -509,30 +494,6 @@ export const useCurrentVideoProgress = () => {
   });
 
   return { currentProgress: videoProgress, isVideoEnded };
-};
-
-export const useVideoMetadata = () => {
-  const { videoPlayerMachineRef } = useZipDealVideoRef();
-  const width = useSelector(videoPlayerMachineRef, (state) => {
-    return state.context.width;
-  });
-  const height = useSelector(videoPlayerMachineRef, (state) => {
-    return state.context.height;
-  });
-  const fps = useSelector(videoPlayerMachineRef, (state) => {
-    return state.context.fps;
-  });
-  const aspectRatio = useSelector(videoPlayerMachineRef, (state) => {
-    return state.context.aspectRatio;
-  });
-  return useMemo(() => {
-    return {
-      width,
-      height,
-      fps,
-      aspectRatio,
-    };
-  }, [width, height, fps, aspectRatio]);
 };
 
 export const useWatchedVideos = () => {

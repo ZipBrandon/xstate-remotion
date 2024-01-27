@@ -25,8 +25,6 @@ export interface WatchedVideoContextInterface {
   setPreferFauxScreen;
   setThumbnail;
   thumbnail;
-  vtt;
-  setVtt;
   togglePlaying;
   setAutoPlay;
   seekToPercent;

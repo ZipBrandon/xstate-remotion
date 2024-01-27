@@ -1,7 +1,7 @@
 import { getVideoMetadata } from "@remotion/media-utils";
 import { PlayerRef } from "@remotion/player";
 import { RefObject } from "react";
-import { assign, fromPromise, setup } from "xstate";
+import { assign, createActor, fromPromise, setup } from "xstate";
 import {
   PlayerEventTypes,
   SinglePlayerListeners,
@@ -686,3 +686,8 @@ export const VideoPlayerMachine = setup({
     },
   },
 });
+
+// export const VideoPlayerMachineActor = createActor(VideoPlayerMachine, {
+//
+// });
+// VideoPlayerMachineActor.start();

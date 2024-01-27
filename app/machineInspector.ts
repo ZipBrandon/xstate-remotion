@@ -1,9 +1,9 @@
 import { createBrowserInspector } from "@statelyai/inspect";
 
 const inspector = () => {
-  // if (typeof window !== "undefined") {
-  //   return createBrowserInspector();
-  // }
+  if (typeof window !== "undefined") {
+    return createBrowserInspector();
+  }
   return { inspect: undefined };
 };
 

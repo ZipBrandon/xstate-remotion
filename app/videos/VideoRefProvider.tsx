@@ -7,13 +7,11 @@ import React, {
   useContext,
   useMemo,
   useRef,
-  useState,
 } from "react";
 import { ActorRefFrom } from "xstate";
 import { inspect } from "~/machineInspector";
 import { VideoPlayerMachine } from "~/VideoPlayerMachine/machine";
 import { VideoPlayerMachineType } from "~/VideoPlayerMachine/types";
-import { VideoCompositions } from "~/videos/compositions/VideoCompositionSettings.ts";
 
 export const defaultStyles: React.CSSProperties = {
   display: `flex`,
