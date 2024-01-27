@@ -1,5 +1,4 @@
 import React, { memo, useCallback } from "react";
-import { UseMeasureRef } from "react-use/lib/useMeasure";
 import {
   useCurrentVideoProgress,
   useWatchedVideos,
@@ -10,7 +9,6 @@ import { VideoProgressIndicator } from "~/videos/VideoProgressIndicator.tsx";
 interface VideoControlsProps {
   contentWidth: number;
   forceFauxScreen: boolean;
-  videoControlsRef: UseMeasureRef<HTMLDivElement>;
 }
 
 export const VideoControls = memo(function VideoControls({

@@ -33,12 +33,7 @@ VideoControls.displayName = `VideoControls`;
 const videoUrl =
   "https://zipdeal.s3.amazonaws.com/m/globalvideo/processed_video/9a830cbb-1236-4494-aa83-1277f2d3a35b.mp4";
 export const VideoComponentV1 = memo(
-  ({
-    videoIdentifier,
-    forceFauxScreen = false,
-    inlinePlayer = true,
-    onClose = () => {},
-  }: VideoComponentProps) => {
+  ({ forceFauxScreen = false, inlinePlayer = true }: VideoComponentProps) => {
     const { zipDealVideoRef, playerRef, videoPlayerMachineRef } =
       useZipDealVideoRef();
     const { unloadVideo, loadVideo } = useWatchedVideos()!;
