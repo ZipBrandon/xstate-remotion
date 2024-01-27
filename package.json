@@ -21,7 +21,7 @@
     "@remotion/transitions": "4.0.84",
     "@remotion/zod-types": "4.0.84",
     "clsx": "^2.1.0",
-    "@statelyai/inspect": "^0.2.1",
+    "@statelyai/inspect": "^0.2.2",
     "@uidotdev/usehooks": "^2.4.1",
     "@xstate/react": "4.0.3",
     "isbot": "^4.1.0",
