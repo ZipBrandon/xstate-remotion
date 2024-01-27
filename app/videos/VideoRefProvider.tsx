@@ -33,10 +33,6 @@ const VideoRefProviderContext = createContext<
       playerRef: RefObject<PlayerRef>;
       videoPlayerMachineRef: ActorRefFrom<VideoPlayerMachineType>;
       videoPlayerSend: ActorRefFrom<VideoPlayerMachineType>[`send`];
-      activeComposition: keyof typeof VideoCompositions;
-      setActiveComposition: React.Dispatch<
-        React.SetStateAction<keyof typeof VideoCompositions>
-      >;
     }
   | undefined
 >(undefined);
@@ -46,8 +42,6 @@ export const VideoRefProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [activeComposition, setActiveComposition] =
-    useState<keyof typeof VideoCompositions>(`VideoComposition`);
   const zipDealVideoRef = React.useRef<HTMLVideoElement>(null);
   const playerRef = useRef<PlayerRef>(null);
   const videoPlayerMachineRef = useActorRef(VideoPlayerMachine.provide({}), {
@@ -68,10 +62,8 @@ export const VideoRefProvider = ({
       videoPlayerMachineRef,
       videoPlayerSend: send,
       playerRef,
-      setActiveComposition,
-      activeComposition,
     }),
-    [activeComposition, send, videoPlayerMachineRef]
+    [send, videoPlayerMachineRef]
   );
 
   return (

@@ -101,7 +101,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   const setPlaying = useCallback(
     (playing, e) => {
       // alert(`Set Playing ${playing}`);
-      console.log(`setPlaying`, playing, e, videoUrl);
+      console.log(`Fn setPlaying`, playing, e, videoUrl);
 
       if (playing) {
         videoPlayerSend({ type: `video.play`, event: e });
@@ -114,7 +114,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   const handleOnPlay = useCallback(
     (e) => {
       // alert(`handleOnPlay ${videoUrl}`);
-      console.log(`handleOnPlay`, `setPlaying true`, e, videoUrl);
+      console.log(`Fn handleOnPlay`, `setPlaying true`, e, videoUrl);
       setPlaying(true, e);
       onPlay?.(e);
     },
@@ -124,7 +124,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   const handleOnPause = useCallback(
     (e) => {
       // alert(`handleOnPause ${videoUrl}`);
-      console.log(`handleOnPause`, `setPlaying false`, e, videoUrl);
+      console.log(`Fn handleOnPause`, `setPlaying false`, e, videoUrl);
       setPlaying(false, e);
       onPause?.(e);
     },
@@ -134,7 +134,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   const handleOnEnded = useCallback(
     (e) => {
       // alert(`handleOnEnded ${videoUrl}`);
-      console.log(`handleOnEnded`, videoUrl);
+      console.log(`Fn handleOnEnded`, videoUrl);
 
       console.log(onEnded);
       onEnded?.(e);
@@ -145,7 +145,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
 
   const handleOnError = useCallback(
     (e) => {
-      console.log(`handleOnError`, videoUrl);
+      console.log(`Fn handleOnError`, videoUrl);
       setPlaying(false, e);
       onError?.(e);
     },
