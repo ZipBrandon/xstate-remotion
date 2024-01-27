@@ -46,7 +46,8 @@ export const VideoRefProvider = ({
     input: {
       videoElementRef: zipDealVideoRef,
       playerRef,
-      autoPlay: true,
+      // autoPlay: true,
+      autoPlay: false,
       compositionExtraDurationFrames: 0,
     },
   });

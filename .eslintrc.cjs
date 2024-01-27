@@ -46,7 +46,12 @@ module.exports = {
         "import/resolver": {
           typescript: {},
         },
+
       },
+       "rules": {
+        "react/jsx-uses-vars": "error",
+        "react/jsx-uses-react": "error"
+    }
     },
 
     // Typescript

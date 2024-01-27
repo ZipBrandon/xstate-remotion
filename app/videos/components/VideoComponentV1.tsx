@@ -27,19 +27,23 @@ interface VideoComponentProps {
   inlinePlayer?: boolean;
   onClose?: () => void;
   videoIdentifier: string;
+  autoPlay: boolean;
 }
 
 VideoControls.displayName = `VideoControls`;
 const videoUrl =
-  "https://zipdeal.s3.amazonaws.com/m/mastervehiclevideo/processed_video/9160c710-4b6e-4d72-b768-38aa1a8af332.mp4";
+  "https://zipdeal.s3.amazonaws.com/m/mastervideo/processed_video/17146707-fddb-4d6d-bc1e-1e90a9f145cf.mp4";
 export const VideoComponentV1 = memo(
-  ({ forceFauxScreen = false, inlinePlayer = true }: VideoComponentProps) => {
+  ({
+    forceFauxScreen = false,
+    inlinePlayer = true,
+    autoPlay = false,
+  }: VideoComponentProps) => {
     const { zipDealVideoRef, playerRef, videoPlayerMachineRef } =
       useZipDealVideoRef();
     const { unloadVideo, loadVideo } = useWatchedVideos()!;
 
-    const { isPlaying, setPlaying, setAutoPlay, isMuted, unmute } =
-      useWatchedVideos()!;
+    const { isPlaying, setPlaying, isMuted, unmute } = useWatchedVideos()!;
 
     const currentProgress = useSelector(videoPlayerMachineRef, (snapshot) => {
       if (Number.isNaN(snapshot.context.videoProgress)) return 0;
@@ -48,13 +52,9 @@ export const VideoComponentV1 = memo(
 
     const isProgressing = currentProgress > 0 && currentProgress < 100;
 
-    const onPlayClick = useCallback(
-      (e) => {
-        setPlaying(!isPlaying);
-      },
-
-      [isPlaying, setPlaying]
-    );
+    const onPlayClick = useCallback(() => {
+      setPlaying(!isPlaying);
+    }, [isPlaying, setPlaying]);
 
     // Idea here to have min controls with, otherwise it is becoming very narrow and inappropriate
 
@@ -69,15 +69,11 @@ export const VideoComponentV1 = memo(
     );
 
     useEffect(() => {
-      loadVideo(videoUrl);
+      loadVideo(videoUrl, { autoPlay });
       return () => {
         unloadVideo();
       };
-    }, [loadVideo, unloadVideo, videoUrl]);
-
-    useEffect(() => {
-      setAutoPlay(true);
-    }, [setAutoPlay]);
+    }, [loadVideo, unloadVideo]);
 
     const videoSizeWidth = 1280;
     const videoSizeHeight = 720;
@@ -150,8 +146,8 @@ export const VideoComponentV1 = memo(
                         compositionWidth={videoWidth}
                       />
                       {isMuted && (
-                        <div
-                          onClick={(e) => {
+                        <button
+                          onClick={() => {
                             unmute();
                           }}
                           className={`cursor-pointer w-full h-full absolute inset-0 text-stone-700/70`}
@@ -178,7 +174,7 @@ export const VideoComponentV1 = memo(
                               d="M480 256c0-74.26-20.19-121.11-50.51-168.61a16 16 0 1 0-27 17.22C429.82 147.38 448 189.5 448 256c0 47.45-8.9 82.12-23.59 113a4 4 0 0 0 .77 4.55L443 391.39a4 4 0 0 0 6.4-1C470.88 348.22 480 307 480 256"
                             />
                           </svg>
-                        </div>
+                        </button>
                       )}
                     </div>
                   )}

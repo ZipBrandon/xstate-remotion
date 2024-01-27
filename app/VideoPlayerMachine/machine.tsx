@@ -110,7 +110,7 @@ export const VideoPlayerMachine = setup({
         };
       }
     ),
-    unloadVideo: assign(({ context, self }) => {
+    unloadVideo: assign(({ self }) => {
       console.log("unloadVideo in machine");
       self.send({
         type: "control.seekToFrame",
@@ -209,12 +209,12 @@ export const VideoPlayerMachine = setup({
     },
     fauxScreenFalse: assign({ fauxScreen: false }),
     fauxScreenTrue: assign({ fauxScreen: true }),
-    setAutoPlay: assign(({ event }) => {
+    setAutoPlay: assign((_, params: { autoPlay: boolean }) => {
       return {
-        autoPlay: event.autoPlay,
+        autoPlay: params.autoPlay,
       };
     }),
-    pauseEntry: ({ context, event }) => {
+    pauseEntry: ({ context }) => {
       // console.log("Paused", "onEntry", context.videoUrl, event);
       getPlayer(context.playerRef)?.pause();
     },
@@ -289,7 +289,7 @@ export const VideoPlayerMachine = setup({
       compositionExtraDurationFrames: input.compositionExtraDurationFrames || 0,
       callbacks: input.callbacks || {
         seeked: () => {
-          // console.log(`fullscreenchange`, e);
+          // console.log(`fullscreenchange`);
         },
         pause: () => {
           // console.log(`fullscreenchange`, e);
@@ -464,7 +464,10 @@ export const VideoPlayerMachine = setup({
           },
           on: {
             "autoplay.set": {
-              actions: "setAutoPlay",
+              actions: {
+                type: "setAutoPlay",
+                params: ({ event }) => ({ autoPlay: event.autoPlay }),
+              },
             },
             "control.rewind": {},
             "control.seekToSeconds": {

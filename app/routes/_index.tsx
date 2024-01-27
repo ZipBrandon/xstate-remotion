@@ -11,7 +11,11 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div>
-      <VideoComponentV1 headingElement={null} videoIdentifier={"something"} />
+      <VideoComponentV1
+        headingElement={null}
+        videoIdentifier={"something"}
+        autoPlay={true}
+      />
     </div>
   );
 }

@@ -18,8 +18,6 @@ export interface WatchedVideoContextInterface {
   setOnEnded;
   setOnError;
   seekRelativeSeconds;
-  setOnPlay;
-  setOnPause;
   unloadVideo;
   preferFauxScreen;
   setPreferFauxScreen;

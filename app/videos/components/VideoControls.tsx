@@ -29,26 +29,17 @@ export const VideoControls = memo(function VideoControls({
   const isPlayingFauxScreen =
     isProgressing && (forceFauxScreen || preferFauxScreen);
 
-  const onPlayPauseClick = useCallback(
-    (e) => {
-      if (isVideoEnded) seekTo(0);
-      togglePlaying();
-    },
-    [isVideoEnded, seekTo, togglePlaying]
-  );
+  const onPlayPauseClick = useCallback(() => {
+    if (isVideoEnded) seekTo(0);
+    togglePlaying();
+  }, [isVideoEnded, seekTo, togglePlaying]);
 
-  const onRewindClick = useCallback(
-    (e) => {
-      seekRelativeSeconds(-5);
-    },
-    [seekRelativeSeconds]
-  );
-  const onFwdClick = useCallback(
-    (e) => {
-      seekRelativeSeconds(5);
-    },
-    [seekRelativeSeconds]
-  );
+  const onRewindClick = useCallback(() => {
+    seekRelativeSeconds(-5);
+  }, [seekRelativeSeconds]);
+  const onFwdClick = useCallback(() => {
+    seekRelativeSeconds(5);
+  }, [seekRelativeSeconds]);
 
   return (
     <div

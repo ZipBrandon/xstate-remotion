@@ -2,18 +2,10 @@ import { Player, PlayerRef } from "@remotion/player";
 import React, { memo } from "react";
 import { VideoComposition } from "~/videos/compositions/VideoComposition.client.tsx";
 
-type CompositionType = React.ComponentType<{
-  videoRef: React.RefObject<HTMLVideoElement>;
-  className?: string;
-  compositionWidth?: number;
-  compositionHeight?: number;
-  videoDurationInFrames: number;
-}>;
 export const SimplePlayer = memo(function OnlyPlayer({
   compositionHeight = 720,
   compositionWidth = 1280,
   durationInFrames,
-  onClick,
   playerRef,
   videoRef,
 }: {
@@ -25,7 +17,7 @@ export const SimplePlayer = memo(function OnlyPlayer({
   compositionWidth: number;
   personalizedName?: string;
 }) {
-  const compositionMinimumDurationInFrames = 0 + 1;
+  const compositionMinimumDurationInFrames = 1;
 
   return (
     <>

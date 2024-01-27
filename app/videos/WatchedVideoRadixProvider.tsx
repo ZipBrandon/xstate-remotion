@@ -1,4 +1,4 @@
-import { CallbackListener, PlayerRef } from "@remotion/player";
+import { PlayerRef } from "@remotion/player";
 import { useSelector } from "@xstate/react";
 import React, {
   createContext,
@@ -20,7 +20,7 @@ const WatchedVideoContext = createContext<
 >(undefined);
 
 export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
-  const [watchedVideos, setWatchedVideos] = useState<any>([]);
+  const [watchedVideos, setWatchedVideos] = useState<string[]>([]);
 
   const { videoPlayerMachineRef, videoPlayerSend } = useZipDealVideoRef();
 
@@ -73,16 +73,16 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   const [isDisplayed, setIsDisplayed] = useState(false);
 
   ////// Handlers
-  const [onPlay, setOnPlay] = useMakeHandlers<`play`>(
-    videoPlayerMachineRef,
-    `play`
-  );
-  const [onPause, setOnPause] = useMakeHandlers<`pause`>(
-    videoPlayerMachineRef,
-    `pause`
-  );
-
-  const [onSeek] = useMakeHandlers<`seeked`>(videoPlayerMachineRef, `seeked`);
+  // const [onPlay, setOnPlay] = useMakeHandlers<`play`>(
+  //   videoPlayerMachineRef,
+  //   `play`
+  // );
+  // const [onPause, setOnPause] = useMakeHandlers<`pause`>(
+  //   videoPlayerMachineRef,
+  //   `pause`
+  // );
+  //
+  // const [onSeek] = useMakeHandlers<`seeked`>(videoPlayerMachineRef, `seeked`);
   const [onEnded, setOnEnded] = useMakeHandlers<`ended`>(
     videoPlayerMachineRef,
     `ended`
@@ -97,7 +97,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     (playing, e) => {
       // alert(`Set Playing ${playing}`);
       console.log(`Fn setPlaying`, playing, e, videoUrl);
-
       if (playing) {
         videoPlayerSend({ type: `video.play`, event: e });
       } else {
@@ -106,32 +105,12 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     },
     [videoPlayerSend, videoUrl]
   );
-  const handleOnPlay = useCallback(
-    (e) => {
-      // alert(`handleOnPlay ${videoUrl}`);
-      console.log(`Fn handleOnPlay`, `setPlaying true`, e, videoUrl);
-      setPlaying(true, e);
-      onPlay?.(e);
-    },
-    [onPlay, setPlaying, videoUrl]
-  );
-
-  const handleOnPause = useCallback(
-    (e) => {
-      // alert(`handleOnPause ${videoUrl}`);
-      console.log(`Fn handleOnPause`, `setPlaying false`, e, videoUrl);
-      setPlaying(false, e);
-      onPause?.(e);
-    },
-    [onPause, setPlaying, videoUrl]
-  );
 
   const handleOnEnded = useCallback(
     (e) => {
       // alert(`handleOnEnded ${videoUrl}`);
       console.log(`Fn handleOnEnded`, videoUrl);
 
-      console.log(onEnded);
       onEnded?.(e);
       setPlaying(false, e);
     },
@@ -148,112 +127,86 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   );
 
   ///// Listeners
-  useEffect(() => {
-    if (!player) {
-      return;
-    }
-    const onPlay: CallbackListener<`play`> = () => {
-      // console.log(`play`);
-    };
-    const onRateChange: CallbackListener<`ratechange`> = (e) => {
-      // console.log(`ratechange`, e.detail.playbackRate);
-    };
-    const onVolumeChange: CallbackListener<`volumechange`> = (e) => {
-      // console.log(`new volume`, e.detail.volume);
-    };
-
-    const onPause: CallbackListener<`pause`> = () => {
-      // console.log(`pausing`);
-    };
-
-    const onSeeked: CallbackListener<`seeked`> = (e) => {
-      // console.log(`seeked to ` + e.detail.frame);
-    };
-
-    const onTimeupdate: CallbackListener<`timeupdate`> = (e) => {
-      // console.log(`time has updated to ` + e.detail.frame);
-    };
-
-    const onEnded: CallbackListener<`ended`> = () => {
-      // console.log(`ended`);
-    };
-
-    const onError: CallbackListener<`error`> = (e) => {
-      // console.log(`error`, e.detail.error);
-    };
-
-    const onFullscreenChange: CallbackListener<`fullscreenchange`> = (e) => {
-      // console.log(`fullscreenchange`, e.detail.isFullscreen);
-    };
-
-    const onScaleChange: CallbackListener<`scalechange`> = (e) => {
-      // console.log(`scalechange`, e.detail.scale);
-    };
-
-    const onMuteChange: CallbackListener<`mutechange`> = (e) => {
-      // console.log(`mutechange`, e.detail.isMuted);
-    };
-
-    player.addEventListener(`play`, onPlay);
-    player.addEventListener(`ratechange`, onRateChange);
-    player.addEventListener(`volumechange`, onVolumeChange);
-    player.addEventListener(`pause`, onPause);
-    player.addEventListener(`ended`, onEnded);
-    player.addEventListener(`error`, onError);
-    player.addEventListener(`fullscreenchange`, onFullscreenChange);
-    player.addEventListener(`scalechange`, onScaleChange);
-    player.addEventListener(`mutechange`, onMuteChange);
-
-    // See below for difference between `seeked` and `timeupdate`
-    player.addEventListener(`seeked`, onSeeked);
-    player.addEventListener(`timeupdate`, onTimeupdate);
-
-    return () => {
-      // Make sure to clean up event listeners
-      if (player) {
-        player.removeEventListener(`play`, onPlay);
-        player.removeEventListener(`ratechange`, onRateChange);
-        player.removeEventListener(`volumechange`, onVolumeChange);
-        player.removeEventListener(`pause`, onPause);
-        player.removeEventListener(`ended`, onEnded);
-        player.removeEventListener(`error`, onError);
-        player.removeEventListener(`fullscreenchange`, onFullscreenChange);
-        player.removeEventListener(`scalechange`, onScaleChange);
-        player.removeEventListener(`mutechange`, onMuteChange);
-        player.removeEventListener(`seeked`, onSeeked);
-        player.removeEventListener(`timeupdate`, onTimeupdate);
-      }
-    };
-  }, [player]);
-
   // useEffect(() => {
-  //   if (!player) return;
-  //   player.addEventListener(`play`, handleOnPlay);
-  //   return () => {
-  //     player.removeEventListener(`play`, handleOnPlay);
+  //   if (!player) {
+  //     return;
+  //   }
+  //   const onPlay: CallbackListener<`play`> = () => {
+  //     // console.log(`play`);
   //   };
-  // }, [handleOnPlay, player]);
-  //
-  // useEffect(() => {
-  //   if (!player) return;
-  //   player.addEventListener(`pause`, handleOnPause);
-  //   return () => {
-  //     player.removeEventListener(`pause`, handleOnPause);
+  //   const onRateChange: CallbackListener<`ratechange`> = () => {
+  //     // console.log(`ratechange`, e.detail.playbackRate);
   //   };
-  // }, [handleOnPause, player]);
-  //
-  // useEffect(() => {
-  //   if (!player) return;
-  //
-  //   player.addEventListener(`seeked`, onSeek);
-  //   return () => {
-  //     player.removeEventListener(`seeked`, onSeek);
+  //   const onVolumeChange: CallbackListener<`volumechange`> = () => {
+  //     // console.log(`new volume`, e.detail.volume);
   //   };
-  // }, [onSeek, player]);
+  //
+  //   const onPause: CallbackListener<`pause`> = () => {
+  //     // console.log(`pausing`);
+  //   };
+  //
+  //   const onSeeked: CallbackListener<`seeked`> = () => {
+  //     // console.log(`seeked to ` + e.detail.frame);
+  //   };
+  //
+  //   const onTimeupdate: CallbackListener<`timeupdate`> = () => {
+  //     // console.log(`time has updated to ` + e.detail.frame);
+  //   };
+  //
+  //   const onEnded: CallbackListener<`ended`> = () => {
+  //     // console.log(`ended`);
+  //   };
+  //
+  //   const onError: CallbackListener<`error`> = () => {
+  //     // console.log(`error`, e.detail.error);
+  //   };
+  //
+  //   const onFullscreenChange: CallbackListener<`fullscreenchange`> = () => {
+  //     // console.log(`fullscreenchange`, e.detail.isFullscreen);
+  //   };
+  //
+  //   const onScaleChange: CallbackListener<`scalechange`> = () => {
+  //     // console.log(`scalechange`, e.detail.scale);
+  //   };
+  //
+  //   const onMuteChange: CallbackListener<`mutechange`> = () => {
+  //     // console.log(`mutechange`, e.detail.isMuted);
+  //   };
+  //
+  //   player.addEventListener(`play`, onPlay);
+  //   player.addEventListener(`ratechange`, onRateChange);
+  //   player.addEventListener(`volumechange`, onVolumeChange);
+  //   player.addEventListener(`pause`, onPause);
+  //   player.addEventListener(`ended`, onEnded);
+  //   player.addEventListener(`error`, onError);
+  //   player.addEventListener(`fullscreenchange`, onFullscreenChange);
+  //   player.addEventListener(`scalechange`, onScaleChange);
+  //   player.addEventListener(`mutechange`, onMuteChange);
+  //
+  //   // See below for difference between `seeked` and `timeupdate`
+  //   player.addEventListener(`seeked`, onSeeked);
+  //   player.addEventListener(`timeupdate`, onTimeupdate);
+  //
+  //   return () => {
+  //     // Make sure to clean up event listeners
+  //     if (player) {
+  //       player.removeEventListener(`play`, onPlay);
+  //       player.removeEventListener(`ratechange`, onRateChange);
+  //       player.removeEventListener(`volumechange`, onVolumeChange);
+  //       player.removeEventListener(`pause`, onPause);
+  //       player.removeEventListener(`ended`, onEnded);
+  //       player.removeEventListener(`error`, onError);
+  //       player.removeEventListener(`fullscreenchange`, onFullscreenChange);
+  //       player.removeEventListener(`scalechange`, onScaleChange);
+  //       player.removeEventListener(`mutechange`, onMuteChange);
+  //       player.removeEventListener(`seeked`, onSeeked);
+  //       player.removeEventListener(`timeupdate`, onTimeupdate);
+  //     }
+  //   };
+  // }, [player]);
 
   useEffect(() => {
     if (!player) return;
-
     const f = (e) => {
       videoPlayerSend({
         type: `video.setProgressFrame`,
@@ -289,13 +242,13 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
 
   ////// Modifiers
   const setAutoPlay = useCallback(
-    (autoPlay) => {
+    (autoPlay: boolean) => {
       videoPlayerSend({ type: `autoplay.set`, autoPlay });
     },
     [videoPlayerSend]
   );
   const togglePlaying = useCallback(
-    (e) => {
+    (e: Event) => {
       videoPlayerSend({ type: `video.toggle`, event: e });
     },
     [videoPlayerSend]
@@ -306,13 +259,13 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   }, [videoPlayerSend]);
 
   const setThumbnail = useCallback(
-    (thumbnailUrl) => {
+    (thumbnailUrl: string) => {
       videoPlayerSend({ type: `video.setThumbnailUrl`, thumbnailUrl });
     },
     [videoPlayerSend]
   );
   const setPreferFauxScreen = useCallback(
-    (prefers) => {
+    (prefers: boolean) => {
       if (prefers) videoPlayerSend({ type: `display.fauxScreen` });
       else videoPlayerSend({ type: `display.inline` });
     },
@@ -320,7 +273,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   );
 
   const setVolume = useCallback(
-    (volume) => {
+    (volume: number) => {
       videoPlayerSend({ type: `volume.set`, volume });
     },
     [videoPlayerSend]
@@ -339,28 +292,33 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   }, [videoPlayerSend]);
 
   const seekTo = useCallback(
-    (seconds, timeElement) => {
+    (seconds: number) => {
       videoPlayerSend({ type: `control.seekToSeconds`, seconds });
     },
     [videoPlayerSend]
   );
   const seekRelativeSeconds = useCallback(
-    (secondsOffset) => {
+    (secondsOffset: number) => {
       videoPlayerSend({ type: `control.seekRelativeSeconds`, secondsOffset });
     },
     [videoPlayerSend]
   );
 
   const setPlaybackRate = useCallback(
-    (playbackRate) => {
+    (playbackRate: number) => {
       videoPlayerSend({ type: `video.setPlaybackRate`, playbackRate });
     },
     [videoPlayerSend]
   );
 
   const loadVideo = useCallback(
-    (videoUrl) => {
+    (videoUrl: string, options: { autoPlay?: boolean } = {}) => {
       videoPlayerSend({ type: `video.load`, videoUrl });
+
+      if (options.autoPlay !== undefined) {
+        const autoPlay = options.autoPlay;
+        videoPlayerSend({ type: `autoplay.set`, autoPlay });
+      }
     },
     [videoPlayerSend]
   );
@@ -377,8 +335,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   }, [videoDuration]);
 
   const seekToPercent = useCallback(
-    (percent) => {
-      console.log(`seekToPercent`, percent);
+    (percent: number) => {
       videoPlayerSend({ type: `control.seekToPercent`, percent });
     },
     [videoPlayerSend]
@@ -390,7 +347,7 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
   //////
 
   const watchedVideoHandler = useCallback(
-    (pageId) => {
+    (pageId: string) => {
       setWatchedVideos((watchedVideos) => {
         if (!watchedVideos.some((video) => video === pageId)) {
           return [...watchedVideos, pageId];
@@ -422,8 +379,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
       setIsDisplayed,
       setOnEnded,
       setOnError,
-      setOnPlay,
-      setOnPause,
       preferFauxScreen,
       setPreferFauxScreen,
       setThumbnail,
@@ -455,8 +410,6 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
       isDisplayed,
       setOnEnded,
       setOnError,
-      setOnPlay,
-      setOnPause,
       preferFauxScreen,
       setPreferFauxScreen,
       setThumbnail,

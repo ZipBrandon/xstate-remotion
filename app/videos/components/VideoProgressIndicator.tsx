@@ -3,7 +3,7 @@ import { useCurrentVideoProgress } from "~/videos/WatchedVideoRadixProvider.tsx"
 import { zipClsx } from "~/zipClsx.ts";
 
 export const VideoProgressIndicator = React.memo(
-  ({ contentWidth }: { contentWidth: any }) => {
+  ({ contentWidth }: { contentWidth: number | "NaN" }) => {
     const { currentProgress } = useCurrentVideoProgress();
 
     const _contentWidth =
