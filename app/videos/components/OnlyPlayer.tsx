@@ -18,7 +18,6 @@ export const OnlyPlayer = memo(function OnlyPlayer({
   onClick,
   playerRef,
   videoRef,
-  composition,
 }: {
   playerRef: React.RefObject<PlayerRef>;
   durationInFrames: number;
@@ -27,7 +26,6 @@ export const OnlyPlayer = memo(function OnlyPlayer({
   compositionHeight: number;
   compositionWidth: number;
   personalizedName?: string;
-  composition: string;
 }) {
   const compositionMinimumDurationInFrames = 0 + 1;
 

@@ -9,25 +9,20 @@ import { VideoProgressIndicator } from "~/videos/VideoProgressIndicator.tsx";
 
 interface VideoControlsProps {
   contentWidth: number;
-  videoIdentifier: string;
   forceFauxScreen: boolean;
-  onClose: unknown;
   videoControlsRef: UseMeasureRef<HTMLDivElement>;
 }
 
 export const VideoControls = memo(function VideoControls({
   videoControlsRef,
   contentWidth,
-  videoIdentifier,
   forceFauxScreen,
-  onClose,
 }: VideoControlsProps) {
   const {
     seekTo,
     seekRelativeSeconds,
     isPlaying,
     preferFauxScreen,
-    toggleFauxScreen,
     togglePlaying,
   } = useWatchedVideos()!;
 
@@ -36,12 +31,6 @@ export const VideoControls = memo(function VideoControls({
   const isProgressing = currentProgress > 0 && currentProgress < 1;
   const isPlayingFauxScreen =
     isProgressing && (forceFauxScreen || preferFauxScreen);
-  const onPreferFauxScreenClick = useCallback(
-    (e) => {
-      toggleFauxScreen();
-    },
-    [toggleFauxScreen]
-  );
 
   const onPlayPauseClick = useCallback(
     (e) => {

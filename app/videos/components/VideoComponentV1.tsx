@@ -153,7 +153,6 @@ export const VideoComponentV1 = memo(
                         onClick={onPlayClick}
                         compositionHeight={videoHeight}
                         compositionWidth={videoWidth}
-                        composition={"ZipVideoComposition"}
                       />
                       {isMuted && (
                         <div
