@@ -259,15 +259,10 @@ export const WatchedVideoRadixProvider = (props: { children: ReactNode }) => {
     if (!player) return;
 
     const f = (e) => {
-      // const { timeStamp } = e;
-      // console.log(`current frame is ` + e.detail.frame); // current frame is 120
       videoPlayerSend({
         type: `video.setProgressFrame`,
         progressFrame: e.detail.frame,
       });
-      // setTimeout(() => {
-      //   videoPlayerSend({ type: `video.setProgressFrame`, progressFrame: e.detail.frame });
-      // }, 5000);
     };
 
     player.addEventListener(`timeupdate`, f);

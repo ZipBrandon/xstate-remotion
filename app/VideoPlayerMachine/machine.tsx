@@ -10,7 +10,9 @@ import {
   VideoPlayerMachineInput,
 } from "./types.d.ts";
 
-export const getVideoElement = (videoPlayerRef: RefObject<HTMLVideoElement>) => {
+export const getVideoElement = (
+  videoPlayerRef: RefObject<HTMLVideoElement>
+) => {
   return videoPlayerRef?.current;
 };
 export const getPlayer = (playerRef: RefObject<PlayerRef>) => {
@@ -27,7 +29,10 @@ export const VideoPlayerMachine = setup({
         frame: params.seconds * context.fps,
       });
     },
-    seekRelativeSeconds: ({ context, self }, params: { secondsOffset: number }) => {
+    seekRelativeSeconds: (
+      { context, self },
+      params: { secondsOffset: number }
+    ) => {
       const player = getPlayer(context.playerRef);
       if (player === null) return;
       const framesAdjustment = params.secondsOffset * context.fps;
@@ -38,20 +43,23 @@ export const VideoPlayerMachine = setup({
         frame: currentFrame + framesAdjustment,
       });
     },
-    setProgressFrame: assign(({ context }, params: { progressFrame: number }) => {
-      const percent = (params.progressFrame / context.compositionDurationInFrames) * 100;
-      return {
-        currentFrame: params.progressFrame,
-        videoProgress: percent,
-      };
-    }),
+    setProgressFrame: assign(
+      ({ context }, params: { progressFrame: number }) => {
+        const percent =
+          (params.progressFrame / context.compositionDurationInFrames) * 100;
+        return {
+          currentFrame: params.progressFrame,
+          videoProgress: percent,
+        };
+      }
+    ),
     setCallback: assign({
       callbacks: (
         { context },
         params: {
           callback: PlayerEventTypes;
           callbackFn: SinglePlayerListeners[keyof SinglePlayerListeners];
-        },
+        }
       ) => {
         const cbs = context.callbacks;
         const cb = params.callback;
@@ -91,19 +99,20 @@ export const VideoPlayerMachine = setup({
           height: number;
           durationInSeconds: number;
           aspectRatio: number;
-        },
+        }
       ) => {
         return {
           videoDurationInSeconds: params.durationInSeconds,
           videoDurationInFrames: params.durationInSeconds * context.fps,
           compositionDurationInFrames:
-            params.durationInSeconds * context.fps + (context.compositionExtraDurationFrames || 0),
+            params.durationInSeconds * context.fps +
+            (context.compositionExtraDurationFrames || 0),
           width: params.width,
           height: params.height,
           aspectRatio: params.aspectRatio,
           currentFrame: 0,
         };
-      },
+      }
     ),
     unloadVideo: assign(({ context, self }) => {
       console.log("unloadVideo in machine");
@@ -130,11 +139,13 @@ export const VideoPlayerMachine = setup({
     setCompositionExtraDurationFrames: assign(
       ({ context }, params: { compositionExtraDurationFrames: number }) => {
         return {
-          compositionExtraDurationFrames: params.compositionExtraDurationFrames || 0,
+          compositionExtraDurationFrames:
+            params.compositionExtraDurationFrames || 0,
           compositionDurationInFrames:
-            context.videoDurationInFrames + (params.compositionExtraDurationFrames || 0),
+            context.videoDurationInFrames +
+            (params.compositionExtraDurationFrames || 0),
         };
-      },
+      }
     ),
     setCanPlay: assign((_, params: { canPlay: boolean }) => {
       return {
@@ -182,7 +193,8 @@ export const VideoPlayerMachine = setup({
       const player = getPlayer(context.playerRef);
       if (player === null) return;
 
-      const normalizedPercent = params.percent > 1 ? params.percent / 100 : params.percent;
+      const normalizedPercent =
+        params.percent > 1 ? params.percent / 100 : params.percent;
       self.send({
         type: "control.seekToFrame",
         frame: normalizedPercent * context.compositionDurationInFrames,
@@ -214,7 +226,7 @@ export const VideoPlayerMachine = setup({
       };
     }),
     pauseEntry: ({ context, event }) => {
-      console.log("Paused", "onEntry", context.videoUrl, event);
+      // console.log("Paused", "onEntry", context.videoUrl, event);
       getPlayer(context.playerRef)?.pause();
     },
     setVideoEndedToFalse: assign({
@@ -231,7 +243,7 @@ export const VideoPlayerMachine = setup({
     videoToPauseConsoleLog: ({ context }) =>
       console.log(`video.toggle Playing ${context.videoUrl} > Paused`),
     videoPlayingEntry: ({ context, event }) => {
-      console.log("Playing", "onEntry", context.videoUrl, event);
+      // console.log("Playing", "onEntry", context.videoUrl, event);
       getPlayer(context.playerRef)?.play();
     },
     videoEndedToTrue: assign({
@@ -262,7 +274,8 @@ export const VideoPlayerMachine = setup({
 
     isVideoElementMuted: ({ context }) => {
       const muted =
-        getPlayer(context.playerRef)?.isMuted() || getVideoElement(context.videoElementRef)?.muted;
+        getPlayer(context.playerRef)?.isMuted() ||
+        getVideoElement(context.videoElementRef)?.muted;
 
       console.log("isVideoElementMuted", muted);
       return !!muted;
@@ -421,11 +434,11 @@ export const VideoPlayerMachine = setup({
               on: {
                 "video.pause": {
                   target: "Paused",
-                  actions: ["videoToPauseConsoleLog"],
+                  // actions: ["videoToPauseConsoleLog"],
                 },
                 "video.toggle": {
                   target: "Paused",
-                  actions: ["videoToPauseConsoleLog"],
+                  // actions: ["videoToPauseConsoleLog"],
                 },
                 "video.finish": {
                   target: "Finished",
@@ -437,11 +450,11 @@ export const VideoPlayerMachine = setup({
               on: {
                 "video.play": {
                   target: "Playing",
-                  actions: ["videoToggleToPlayingConsoleLog"],
+                  // actions: ["videoToggleToPlayingConsoleLog"],
                 },
                 "video.toggle": {
                   target: "Playing",
-                  actions: ["videoToggleToPlayingConsoleLog"],
+                  // actions: ["videoToggleToPlayingConsoleLog"],
                 },
               },
             },
@@ -571,7 +584,8 @@ export const VideoPlayerMachine = setup({
                 {
                   type: "setCompositionExtraDurationFrames",
                   params: ({ event }) => ({
-                    compositionExtraDurationFrames: event.compositionExtraDurationFrames,
+                    compositionExtraDurationFrames:
+                      event.compositionExtraDurationFrames,
                   }),
                 },
               ],
