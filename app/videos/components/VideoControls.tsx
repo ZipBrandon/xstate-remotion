@@ -4,7 +4,7 @@ import {
   useWatchedVideos,
 } from "~/videos/WatchedVideoRadixProvider.tsx";
 import { zipClsx } from "~/zipClsx.ts";
-import { VideoProgressIndicator } from "~/videos/VideoProgressIndicator.tsx";
+import { VideoProgressIndicator } from "~/videos/components/VideoProgressIndicator.tsx";
 
 interface VideoControlsProps {
   contentWidth: number;

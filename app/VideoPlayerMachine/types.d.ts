@@ -1,6 +1,6 @@
 import { PlayerRef } from "@remotion/player";
 import { RefObject } from "react";
-import { VideoPlayerMachine } from "~zd-machines/VideoPlayerMachine/machine.tsx";
+import { VideoPlayerMachine } from "~/VideoPlayerMachine/machine.tsx";
 
 export type VideoPlayerMachineType = typeof VideoPlayerMachine;
 type SeekPayload = {
@@ -99,7 +99,9 @@ export type VideoPlayerMachineInput = Pick<
   VideoPlayerMachineContext,
   "videoElementRef" | "playerRef"
 > &
-  Partial<Pick<VideoPlayerMachineContext, OptionalKeysOfVideoPlayerMachineInput>>;
+  Partial<
+    Pick<VideoPlayerMachineContext, OptionalKeysOfVideoPlayerMachineInput>
+  >;
 export type VideoPlayerMachineEvents =
   | { type: "Stop" }
   | { type: "control.rewind"; seconds: number }

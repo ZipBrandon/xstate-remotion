@@ -1,8 +1,8 @@
 import { getVideoMetadata } from "@remotion/media-utils";
 import { PlayerRef } from "@remotion/player";
 import { RefObject } from "react";
-import { assign, createActor, fromPromise, setup } from "xstate";
-import {
+import { assign, fromPromise, setup } from "xstate";
+import type {
   PlayerEventTypes,
   SinglePlayerListeners,
   VideoPlayerMachineContext,
@@ -22,8 +22,6 @@ export const getPlayer = (playerRef: RefObject<PlayerRef>) => {
 export const VideoPlayerMachine = setup({
   actions: {
     seekToSeconds: ({ context, self }, params: { seconds: number }) => {
-      const player = getPlayer(context.playerRef);
-      if (player === null) return;
       self.send({
         type: "control.seekToFrame",
         frame: params.seconds * context.fps,
@@ -33,8 +31,6 @@ export const VideoPlayerMachine = setup({
       { context, self },
       params: { secondsOffset: number }
     ) => {
-      const player = getPlayer(context.playerRef);
-      if (player === null) return;
       const framesAdjustment = params.secondsOffset * context.fps;
       const currentFrame = context.currentFrame;
 
@@ -190,9 +186,6 @@ export const VideoPlayerMachine = setup({
     },
 
     seekToPercent: ({ context, self }, params: { percent: number }) => {
-      const player = getPlayer(context.playerRef);
-      if (player === null) return;
-
       const normalizedPercent =
         params.percent > 1 ? params.percent / 100 : params.percent;
       self.send({
@@ -202,11 +195,7 @@ export const VideoPlayerMachine = setup({
     },
     // End Seeking
     setPlaybackRate: assign({
-      playbackRate: ({ context }, params: { playbackRate: number }) => {
-        const player = getPlayer(context.playerRef);
-        if (player) {
-          // player.playbackRate = event.playbackRate;
-        }
+      playbackRate: (_, params: { playbackRate: number }) => {
         return params.playbackRate;
       },
     }),
@@ -233,16 +222,16 @@ export const VideoPlayerMachine = setup({
       isVideoEnded: false,
     }),
 
-    resetVideoToBeginning: ({ context }) => {
-      const player = getPlayer(context.playerRef);
-      if (player === null) return;
+    resetVideoToBeginning: () => {
+      // const player = getPlayer(context.playerRef);
+      // if (player === null) return;
       // player.seekTo(0) = 0;
     },
     videoToggleToPlayingConsoleLog: ({ context }) =>
       console.log(`video.toggle Paused ${context.videoUrl} > Playing`),
     videoToPauseConsoleLog: ({ context }) =>
       console.log(`video.toggle Playing ${context.videoUrl} > Paused`),
-    videoPlayingEntry: ({ context, event }) => {
+    videoPlayingEntry: ({ context }) => {
       // console.log("Playing", "onEntry", context.videoUrl, event);
       getPlayer(context.playerRef)?.play();
     },
@@ -277,7 +266,6 @@ export const VideoPlayerMachine = setup({
         getPlayer(context.playerRef)?.isMuted() ||
         getVideoElement(context.videoElementRef)?.muted;
 
-      console.log("isVideoElementMuted", muted);
       return !!muted;
     },
   },
@@ -333,8 +321,8 @@ export const VideoPlayerMachine = setup({
         fullscreenchange: () => {
           // console.log(`fullscreenchange`, e);
         },
-        mutechange: (e) => {
-          console.log("mutechange", e);
+        mutechange: () => {
+          // console.log("mutechange", e);
         },
       },
       isMobile: input.isMobile || false,
@@ -560,7 +548,7 @@ export const VideoPlayerMachine = setup({
                 {
                   type: "loadVideo",
                   params: ({ event }) => {
-                    console.log("loadVideo event", event.videoUrl);
+                    // console.log("loadVideo event", event.videoUrl);
                     return { videoUrl: event.videoUrl };
                   },
                 },

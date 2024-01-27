@@ -26,7 +26,6 @@ export const defaultStyles: React.CSSProperties = {
 
 const VideoRefProviderContext = createContext<
   | {
-      portalNode: any;
       zipDealVideoRef: RefObject<HTMLVideoElement>;
       playerRef: RefObject<PlayerRef>;
       videoPlayerMachineRef: ActorRefFrom<VideoPlayerMachineType>;

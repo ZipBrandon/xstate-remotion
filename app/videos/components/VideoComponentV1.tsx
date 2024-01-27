@@ -4,7 +4,7 @@ import { VideoControls } from "~/videos/components/VideoControls.tsx";
 import { useZipDealVideoRef } from "../VideoRefProvider.tsx";
 import { useWatchedVideos } from "~/videos/WatchedVideoRadixProvider.tsx";
 import { zipClsx } from "~/zipClsx.ts";
-import { OnlyPlayer } from "~/videos/components/OnlyPlayer.tsx";
+import { SimplePlayer } from "~/videos/components/SimplePlayer.tsx";
 
 const Container = ({
   id = undefined,
@@ -31,7 +31,7 @@ interface VideoComponentProps {
 
 VideoControls.displayName = `VideoControls`;
 const videoUrl =
-  "https://zipdeal.s3.amazonaws.com/m/globalvideo/processed_video/9a830cbb-1236-4494-aa83-1277f2d3a35b.mp4";
+  "https://zipdeal.s3.amazonaws.com/m/mastervehiclevideo/processed_video/9160c710-4b6e-4d72-b768-38aa1a8af332.mp4";
 export const VideoComponentV1 = memo(
   ({ forceFauxScreen = false, inlinePlayer = true }: VideoComponentProps) => {
     const { zipDealVideoRef, playerRef, videoPlayerMachineRef } =
@@ -141,7 +141,7 @@ export const VideoComponentV1 = memo(
                         "relative h-0 w-full overflow-hidden pb-[56.25%]": true,
                       })}
                     >
-                      <OnlyPlayer
+                      <SimplePlayer
                         playerRef={playerRef}
                         durationInFrames={durationInFrames}
                         videoRef={zipDealVideoRef}
