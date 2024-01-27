@@ -1,10 +1,9 @@
 import { createBrowserInspector } from "@statelyai/inspect";
 
 const inspector = () => {
-  if (typeof window !== "undefined") {
-    console.log("loca", window.location.hostname.indexOf("zd-local") > -1);
-    if (window.location.hostname.indexOf("zd-local") > -1) return createBrowserInspector();
-  }
+  // if (typeof window !== "undefined") {
+  //   return createBrowserInspector();
+  // }
   return { inspect: undefined };
 };
 

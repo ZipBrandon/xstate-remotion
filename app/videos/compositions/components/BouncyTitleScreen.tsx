@@ -1,6 +1,12 @@
 import React from "react";
-import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { defaultStyles } from "~/videos/ZipDealVideoRefProvider.tsx";
+import {
+  AbsoluteFill,
+  interpolate,
+  spring,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
+import { defaultStyles } from "~/videos/VideoRefProvider.tsx";
 import { zipClsx } from "~zipdeal-ui/utilities/zipClsx.ts";
 
 export const BouncyTitleScreen: React.FC<{
@@ -25,7 +31,11 @@ export const BouncyTitleScreen: React.FC<{
     >
       <div
         style={{
-          transform: `translateY(${interpolate(progress, [0, 1], [1000, 0])}px)`,
+          transform: `translateY(${interpolate(
+            progress,
+            [0, 1],
+            [1000, 0]
+          )}px)`,
         }}
       >
         {children}

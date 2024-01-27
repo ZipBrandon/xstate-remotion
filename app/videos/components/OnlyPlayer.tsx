@@ -2,7 +2,7 @@ import { Player, PlayerRef, RenderPoster } from "@remotion/player";
 import React, { memo, useCallback, useRef, useState } from "react";
 import { AbsoluteFill } from "remotion";
 import { BufferManager } from "~/videos/components/BufferManager.tsx";
-import { ZipVideoCompositions } from "~/videos/compositions/VideoCompositionSettings.ts";
+import { VideoComposition } from "~/videos/compositions/VideoComposition.client.tsx";
 
 type CompositionType = React.ComponentType<{
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -29,11 +29,7 @@ export const OnlyPlayer = memo(function OnlyPlayer({
   personalizedName?: string;
   composition: string;
 }) {
-  const activeComposition =
-    ZipVideoCompositions[composition as keyof typeof ZipVideoCompositions];
-  const { CompositionComponent } = activeComposition;
-
-  const compositionMinimumDurationInFrames = activeComposition.additional + 1;
+  const compositionMinimumDurationInFrames = 0 + 1;
 
   const [buffering, setBuffering] = useState(false);
   const pausedBecauseOfBuffering = useRef(false);
@@ -79,11 +75,8 @@ export const OnlyPlayer = memo(function OnlyPlayer({
       <BufferManager onBuffer={onBuffer} onContinue={onContinue}>
         <Player
           ref={playerRef}
-          component={CompositionComponent}
-          durationInFrames={
-            (Math.floor(durationInFrames) || 10000) +
-            activeComposition.additional
-          }
+          component={VideoComposition}
+          durationInFrames={Math.floor(durationInFrames) || 10000}
           compositionHeight={compositionHeight}
           compositionWidth={compositionWidth}
           fps={30}

@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { getPlayer, getVideoElement } from "~/VideoPlayerMachine/machine.tsx";
 import { PlayerEventTypes } from "~/VideoPlayerMachine/types";
-import { useZipDealVideoRef } from "~/videos/ZipDealVideoRefProvider.tsx";
+import { useZipDealVideoRef } from "~/videos/VideoRefProvider.tsx";
 
 import type { WatchedVideoContextInterface } from "./WatchedVideoTypes.d.ts";
 

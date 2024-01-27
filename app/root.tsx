@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { ZipDealVideoRefProvider } from "~/videos/ZipDealVideoRefProvider.tsx";
+import { VideoRefProvider } from "~/videos/VideoRefProvider.tsx";
 import { WatchedVideoRadixProvider } from "~/videos/WatchedVideoRadixProvider.tsx";
 import "./styles/tailwind.css";
 
@@ -20,11 +20,11 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <ZipDealVideoRefProvider>
+        <VideoRefProvider>
           <WatchedVideoRadixProvider>
             <Outlet />
           </WatchedVideoRadixProvider>
-        </ZipDealVideoRefProvider>
+        </VideoRefProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

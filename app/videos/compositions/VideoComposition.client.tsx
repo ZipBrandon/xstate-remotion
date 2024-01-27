@@ -2,11 +2,11 @@
 import { TransitionSeries } from "@remotion/transitions";
 import { useSelector } from "@xstate/react";
 import React, { memo } from "react";
-import { AbsoluteFill, Video } from "remotion";
+import { AbsoluteFill } from "remotion";
 import { PausableVideo } from "~/videos/components/PausableVideo.tsx";
-import { useZipDealVideoRef } from "../ZipDealVideoRefProvider.tsx";
+import { useZipDealVideoRef } from "../VideoRefProvider.tsx";
 
-export const ZipVideoComposition = memo(
+export const VideoComposition = memo(
   ({
     videoRef,
     className = ``,
@@ -18,9 +18,11 @@ export const ZipVideoComposition = memo(
   }) => {
     const { videoPlayerMachineRef } = useZipDealVideoRef();
 
-    const src = useSelector(videoPlayerMachineRef, (snapshot) => snapshot.context.videoUrl || ``);
+    const src = useSelector(
+      videoPlayerMachineRef,
+      (snapshot) => snapshot.context.videoUrl || ``
+    );
 
-    console.log(`VideosCompositionsZipVideoCompositionClient`, { src });
     if (!src) {
       return null;
     }
@@ -34,7 +36,7 @@ export const ZipVideoComposition = memo(
         </TransitionSeries>
       </AbsoluteFill>
     );
-  },
+  }
 );
 
-ZipVideoComposition.displayName = `ZipVideoComposition`;
+VideoComposition.displayName = `ZipVideoComposition`;

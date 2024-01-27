@@ -10,15 +10,10 @@ import React, {
   useState,
 } from "react";
 import { ActorRefFrom } from "xstate";
-import {
-  ZipVideoCompositions,
-  ZipVideoCompositionSettings,
-} from "./compositions/VideoCompositionSettings.ts";
-import { OnlyPlayer } from "./components/OnlyPlayer.tsx";
 import { inspect } from "~/machineInspector";
 import { VideoPlayerMachine } from "~/VideoPlayerMachine/machine";
 import { VideoPlayerMachineType } from "~/VideoPlayerMachine/types";
-import { createHtmlPortalNode, InPortal } from "~/Portals.tsx";
+import { VideoCompositions } from "~/videos/compositions/VideoCompositionSettings.ts";
 
 export const defaultStyles: React.CSSProperties = {
   display: `flex`,
@@ -31,32 +26,28 @@ export const defaultStyles: React.CSSProperties = {
   lineHeight: 1.1,
 };
 
-const ZipDealVideoRefProviderContext = createContext<
+const VideoRefProviderContext = createContext<
   | {
       portalNode: any;
       zipDealVideoRef: RefObject<HTMLVideoElement>;
       playerRef: RefObject<PlayerRef>;
       videoPlayerMachineRef: ActorRefFrom<VideoPlayerMachineType>;
       videoPlayerSend: ActorRefFrom<VideoPlayerMachineType>[`send`];
-      activeComposition: keyof typeof ZipVideoCompositions;
+      activeComposition: keyof typeof VideoCompositions;
       setActiveComposition: React.Dispatch<
-        React.SetStateAction<keyof typeof ZipVideoCompositions>
+        React.SetStateAction<keyof typeof VideoCompositions>
       >;
     }
   | undefined
 >(undefined);
 
-const isSSR = typeof window === `undefined`;
-
-export const portalNode = isSSR ? undefined : createHtmlPortalNode();
-
-export const ZipDealVideoRefProvider = ({
+export const VideoRefProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
   const [activeComposition, setActiveComposition] =
-    useState<keyof typeof ZipVideoCompositions>(`ZipVideoComposition`);
+    useState<keyof typeof VideoCompositions>(`VideoComposition`);
   const zipDealVideoRef = React.useRef<HTMLVideoElement>(null);
   const playerRef = useRef<PlayerRef>(null);
   const videoPlayerMachineRef = useActorRef(VideoPlayerMachine.provide({}), {
@@ -65,7 +56,7 @@ export const ZipDealVideoRefProvider = ({
       videoElementRef: zipDealVideoRef,
       playerRef,
       autoPlay: true,
-      compositionExtraDurationFrames: ZipVideoCompositionSettings.additional,
+      compositionExtraDurationFrames: 0,
     },
   });
 
@@ -73,7 +64,6 @@ export const ZipDealVideoRefProvider = ({
 
   const context = useMemo(
     () => ({
-      portalNode,
       zipDealVideoRef,
       videoPlayerMachineRef,
       videoPlayerSend: send,
@@ -85,44 +75,14 @@ export const ZipDealVideoRefProvider = ({
   );
 
   return (
-    <ZipDealVideoRefProviderContext.Provider value={context}>
+    <VideoRefProviderContext.Provider value={context}>
       {children}
-      {portalNode && (
-        <InPortal node={portalNode}>
-          <OnlyPlayer
-            playerRef={playerRef}
-            durationInFrames={10000}
-            videoRef={zipDealVideoRef}
-            onClick={function (e: any): void {
-              throw new Error(`Function not implemented.`);
-            }}
-            compositionHeight={720}
-            compositionWidth={1280}
-            composition={activeComposition}
-          ></OnlyPlayer>
-          {/*<ZipVideo videoRef={zipDealVideoRef} />*/}
-        </InPortal>
-      )}
-      {!portalNode && ( // SSR-mode to keep hydration proper
-        // <ZipVideo videoRef={zipDealVideoRef} />
-        <OnlyPlayer
-          playerRef={playerRef}
-          durationInFrames={10000}
-          videoRef={zipDealVideoRef}
-          onClick={function (e: any): void {
-            throw new Error(`Function not implemented.`);
-          }}
-          compositionHeight={720}
-          compositionWidth={1280}
-          composition={`BasicComposition`}
-        ></OnlyPlayer>
-      )}
-    </ZipDealVideoRefProviderContext.Provider>
+    </VideoRefProviderContext.Provider>
   );
 };
 
 export const useZipDealVideoRef = () => {
-  const context = useContext(ZipDealVideoRefProviderContext);
+  const context = useContext(VideoRefProviderContext);
   if (context === undefined) {
     throw new Error(
       `useZipDealVideoRef must be used within a ZipDealVideoRefProvider`

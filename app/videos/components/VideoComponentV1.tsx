@@ -1,11 +1,12 @@
 import { useSelector } from "@xstate/react";
 import React, { memo, Ref, useCallback, useEffect } from "react";
 import { VideoControls } from "~/videos/components/VideoControls.tsx";
-import { useZipDealVideoRef } from "../ZipDealVideoRefProvider.tsx";
+import { useZipDealVideoRef } from "../VideoRefProvider.tsx";
 import { useWatchedVideos } from "~/videos/WatchedVideoRadixProvider.tsx";
 import { zipClsx } from "~/zipClsx.ts";
 import { OutPortal } from "~/Portals.tsx";
 import { useMeasure } from "@uidotdev/usehooks";
+import { OnlyPlayer } from "~/videos/components/OnlyPlayer.tsx";
 
 const Container = ({
   id = undefined,
@@ -145,17 +146,15 @@ export const VideoComponentV1 = memo(
                         "relative h-0 w-full overflow-hidden pb-[56.25%]": true,
                       })}
                     >
-                      {portalNode && (
-                        <OutPortal
-                          node={portalNode}
-                          playerRef={playerRef}
-                          durationInFrames={durationInFrames}
-                          videoRef={zipDealVideoRef}
-                          onClick={onPlayClick}
-                          compositionHeight={videoHeight}
-                          compositionWidth={videoWidth}
-                        />
-                      )}
+                      <OnlyPlayer
+                        playerRef={playerRef}
+                        durationInFrames={durationInFrames}
+                        videoRef={zipDealVideoRef}
+                        onClick={onPlayClick}
+                        compositionHeight={videoHeight}
+                        compositionWidth={videoWidth}
+                        composition={"ZipVideoComposition"}
+                      />
                       {isMuted && (
                         <div
                           onClick={(e) => {
