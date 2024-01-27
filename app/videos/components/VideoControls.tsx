@@ -14,7 +14,6 @@ interface VideoControlsProps {
 }
 
 export const VideoControls = memo(function VideoControls({
-  videoControlsRef,
   contentWidth,
   forceFauxScreen,
 }: VideoControlsProps) {
@@ -64,7 +63,6 @@ export const VideoControls = memo(function VideoControls({
     >
       <VideoProgressIndicator contentWidth={contentWidth} />
       <div
-        ref={videoControlsRef}
         id={`video-controls`}
         className={zipClsx({
           [`relative mx-auto flex h-full items-center justify-center`]: true,

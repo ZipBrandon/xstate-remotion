@@ -1,11 +1,9 @@
 import { useSelector } from "@xstate/react";
-import React, { memo, Ref, useCallback, useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { VideoControls } from "~/videos/components/VideoControls.tsx";
 import { useZipDealVideoRef } from "../VideoRefProvider.tsx";
 import { useWatchedVideos } from "~/videos/WatchedVideoRadixProvider.tsx";
 import { zipClsx } from "~/zipClsx.ts";
-import { OutPortal } from "~/Portals.tsx";
-import { useMeasure } from "@uidotdev/usehooks";
 import { OnlyPlayer } from "~/videos/components/OnlyPlayer.tsx";
 
 const Container = ({
@@ -32,17 +30,18 @@ interface VideoComponentProps {
 }
 
 VideoControls.displayName = `VideoControls`;
-
+const videoUrl =
+  "https://zipdeal.s3.amazonaws.com/m/globalvideo/processed_video/9a830cbb-1236-4494-aa83-1277f2d3a35b.mp4";
 export const VideoComponentV1 = memo(
   ({
     videoIdentifier,
-    headingElement = null,
     forceFauxScreen = false,
     inlinePlayer = true,
     onClose = () => {},
   }: VideoComponentProps) => {
-    const { portalNode, zipDealVideoRef, playerRef, videoPlayerMachineRef } =
+    const { zipDealVideoRef, playerRef, videoPlayerMachineRef } =
       useZipDealVideoRef();
+    const { unloadVideo, loadVideo } = useWatchedVideos()!;
 
     const { isPlaying, setPlaying, setAutoPlay, isMuted, unmute } =
       useWatchedVideos()!;
@@ -75,6 +74,13 @@ export const VideoComponentV1 = memo(
     );
 
     useEffect(() => {
+      loadVideo(videoUrl);
+      return () => {
+        unloadVideo();
+      };
+    }, [loadVideo, unloadVideo, videoUrl]);
+
+    useEffect(() => {
       setAutoPlay(true);
     }, [setAutoPlay]);
 
@@ -83,11 +89,6 @@ export const VideoComponentV1 = memo(
     const isPlayingFauxScreen = false;
     const videoWidth = Math.floor(videoSizeWidth > 0 ? videoSizeWidth : 1280);
     const videoHeight = Math.floor(videoSizeHeight > 0 ? videoSizeHeight : 720); //videoWidth / videoAspectRatio;
-    const [videoPlayerHousingRef, { width: videoHousingWidth }] =
-      useMeasure<HTMLDivElement>();
-
-    const [videoControlsRef, { height: controlButtonsHeight }] =
-      useMeasure<HTMLDivElement>();
 
     const maxWidth1 = isPlayingFauxScreen ? videoWidth : undefined;
 
@@ -110,7 +111,6 @@ export const VideoComponentV1 = memo(
             })}
           >
             <div
-              ref={videoPlayerHousingRef as Ref<HTMLDivElement>}
               id={`video-player-housing-measurer`}
               className={zipClsx({
                 " w-full": true,
@@ -193,11 +193,8 @@ export const VideoComponentV1 = memo(
 
             {displayPlayer && (
               <VideoControls
-                videoControlsRef={videoControlsRef}
                 contentWidth={videoWidth}
-                videoIdentifier={videoIdentifier}
                 forceFauxScreen={forceFauxScreen}
-                onClose={onClose}
               />
             )}
           </div>
